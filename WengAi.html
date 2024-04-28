@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>ChatGPT AI Chat</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f7f7f7;
+  margin: 0;
+  padding: 0;
+}
+
+h6 {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 900;
+  background-image: linear-gradient(
+    -225deg,
+    #E3F2FD 0%,
+    #0061FF 29%,
+    #0065FF 67%,
+    #E3F2FD 100%
+  );
+  background-size: auto auto;
+  background-clip: border-box;
+  background-size: 200% auto;
+  color: #fff;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textclip 3s linear infinite;
+  z-index: 1; /* Ensure the title is above other elements */
+}
+
+@keyframes textclip {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.chat-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 100%;
+  width: 80%; /* Adjust width as needed */
+  max-height: 60vh; /* Adjust height as needed */
+  overflow-y: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+#chat-area {
+  padding: 20px;
+}
+
+.user-message {
+  max-width: 70%;
+  padding: 10px;
+  margin: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 10px;
+  align-self: flex-start;
+}
+
+.ai-message {
+  max-width: 70%;
+  padding: 10px;
+  margin: 10px;
+  background-color: #f0f0f0;
+  color: #333;
+  border-radius: 10px;
+  align-self: flex-end;
+}
+
+.user-input-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  z-index: 1; /* Ensure the input container is above other elements */
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+}
+
+button {
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.settings-icon {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-icon i {
+  font-size: 24px;
+}
+
+.back-clear-container {
+  display: none;
+  position: absolute;
+  top: 60px; /* Adjusted top position to match the title */
+  right: 10px;
+  padding: 10px;
+}
+
+.back-clear-container.active {
+  display: block;
+}
+
+.back-clear-container button {
+  display: block;
+}
+</style>
+</head>
+<body>
+<h6>ChatGPT AI Chat</h6>
+<div class="chat-container">
+  <div id="chat-area"></div>
+</div>
+<div class="user-input-container">
+  <button class="settings-icon" onclick="toggleButtons()"><i class="fas fa-cog"></i></button>
+  <input type="text" id="user-input" placeholder="Type your message..." oninput="handleInput()">
+  <button class="send-button" onclick="sendMessage()" disabled>Send</button>
+</div>
+<div class="back-clear-container" onclick="toggleButtons()">
+  <button class="back-button" onclick="goBack()">Back</button>
+  <button class="clear-button" onclick="clearChat()">Clear</button>
+</div>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script>
+var isBotResponding = false;
+var hasAskedQuestion = false;
+
+function sendMessage() {
+  var userInput = document.getElementById("user-input").value.trim();
+  if ((!userInput && !hasAskedQuestion) || isBotResponding || userInput === "") {
+    return;
+  }
+
+  var chatArea = document.getElementById("chat-area");
+
+  if (!hasAskedQuestion) {
+    hasAskedQuestion = true;
+  }
+
+  var userMessage = '<div class="user-message">' + userInput + '</div>';
+  chatArea.innerHTML += userMessage;
+
+  // Scroll to the bottom of the chat area
+  chatArea.scrollTop = chatArea.scrollHeight;
+
+  // Disable input and send button
+  document.getElementById("user-input").disabled = true;
+  document.querySelector(".send-button").disabled = true;
+
+  // Send user message to backend API
+  var query = encodeURIComponent(userInput);
+  var url = `https://deku-rest-api.replit.app/gpt4?prompt=${query}&uid=200`;
+  isBotResponding = true;
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data); // Log response to console
+      var aiMessage = '<div class="ai-message">' + data.gpt4 + '</div>';
+      chatArea.innerHTML += aiMessage;
+
+      // Scroll to the bottom of the chat area
+      chatArea.scrollTop = chatArea.scrollHeight;
+
+      isBotResponding = false;
+
+      // Enable input and send button
+      document.getElementById("user-input").disabled = false;
+      document.querySelector(".send-button").disabled = false;
+    })
+    .catch(error => {
+      var errorMessage = '<div class="ai-message">Sorry, I encountered an error.</div>';
+      chatArea.innerHTML += errorMessage;
+
+      // Scroll to the bottom of the chat area
+      chatArea.scrollTop = chatArea.scrollHeight;
+
+      isBotResponding = false;
+
+      // Enable input and send button
+      document.getElementById("user-input").disabled = false;
+      document.querySelector(".send-button").disabled = false;
+    });
+
+  document.getElementById("user-input").value = ""; // Clear input field after sending message
+}
+
+function scrollToBottom() {
+  var chatArea = document.getElementById("chat-area");
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function goBack() {
+  window.location.href = "index.html";
+}
+
+function clearChat() {
+  var chatArea = document.getElementById("chat-area");
+  chatArea.innerHTML = "";
+  hasAskedQuestion = false;
+}
+
+function handleInput() {
+  var userInput = document.getElementById("user-input").value.trim();
+  if (userInput && !isBotResponding) {
+    document.querySelector(".send-button").disabled = false;
+  } else {
+    document.querySelector(".send-button").disabled = true;
+  }
+}
+
+function toggleButtons() {
+  var backClearContainer = document.querySelector(".back-clear-container");
+  backClearContainer.classList.toggle("active");
+}
+
+var windowHeight = window.innerHeight;
+var inputContainerHeight = document.querySelector(".user-input-container").offsetHeight;
+
+window.addEventListener('resize', function() {
+  var newWindowHeight = window.innerHeight;
+  if (newWindowHeight < windowHeight) {
+    // Keyboard is displayed
+    var bottomDistance = newWindowHeight - inputContainerHeight;
+    if (bottomDistance < 0) {
+      // Adjust the position to keep a reasonable distance from the top
+      document.querySelector(".user-input-container").style.bottom = bottomDistance + "px";
+    } else {
+      document.querySelector(".user-input-container").style.bottom = "0";
+    }
+  } else {
+    // Keyboard is hidden
+    document.querySelector(".user-input-container").style.bottom = "0";
+  }
+  windowHeight = newWindowHeight;
+});
+
+window.addEventListener('scroll', function() {
+  var newWindowHeight = window.innerHeight;
+  if (newWindowHeight < windowHeight) {
+    // Keyboard is displayed
+    var bottomDistance = newWindowHeight - inputContainerHeight;
+    if (bottomDistance < 0) {
+      // Adjust the position to keep a reasonable distance from the top
+      document.querySelector(".user-input-container").style.bottom = bottomDistance + "px";
+    } else {
+      document.querySelector(".user-input-container").style.bottom = "0";
+    }
+  } else {
+    // Keyboard is hidden
+    document.querySelector(".user-input-container").style.bottom = "0";
+  }
+  windowHeight = newWindowHeight;
+});
+</script>
+</body>
+</html>
