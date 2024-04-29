@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lyrics Search</title>
+    <style>
+        body {
+            background-image: url('https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZmh5YnFkN2s5aG11NTFoemk2YWExMjI2dnZnbTFuNmZxcW8wY3k1NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aRZ4vTsHnyW6A/giphy.gif');
+            background-size: cover;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .lyrics-box {
+            margin-top: 20px;
+            text-align: center;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+        #lyricsContainer {
+            margin-top: 20px;
+            text-align: center;
+        }
+        pre {
+            white-space: pre-wrap;
+        }
+        .copy-button {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .copy-button:hover {
+            background-color: #777;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search Song Lyrics</h1>
+    <form id="searchForm">
+        <label for="title">Enter song title:</label><br>
+        <input type="text" id="title" name="title"><br>
+        <button type="submit">Search</button>
+    </form>
+    <div class="lyrics-box" id="lyricsBox"></div>
+
+    <script>
+        const form = document.getElementById('searchForm');
+        const lyricsBox = document.getElementById('lyricsBox');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const title = document.getElementById('title').value;
+            try {
+                const response = await fetch(`https://deku-rest-api.replit.app/search/lyrics?q=${title}`);
+                const data = await response.json();
+                const lyrics = data.result.lyrics;
+                displayLyrics(lyrics);
+            } catch (error) {
+                console.error('Error fetching lyrics:', error);
+            }
+        });
+
+        function displayLyrics(lyrics) {
+            lyricsBox.innerHTML = `
+                <pre>${lyrics}</pre>
+                <button class="copy-button" onclick="copyToClipboard()">Copy</button>
+            `;
+        }
+
+        function copyToClipboard() {
+            const textArea = document.createElement('textarea');
+            textArea.value = lyricsBox.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert('Lyrics copied to clipboard!');
+        }
+    </script>
+</body>
+</html>
