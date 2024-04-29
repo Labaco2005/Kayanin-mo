@@ -10,6 +10,7 @@
             height: 100%;
             margin: 0;
             padding: 0;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
         }
         body {
             background-image: url('https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZmh5YnFkN2s5aG11NTFoemk2YWExMjI2dnZnbTFuNmZxcW8wY3k1NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/aRZ4vTsHnyW6A/giphy.gif');
@@ -188,7 +189,7 @@
 
         async function typeText(text, element) {
             for (let i = 0; i < text.length; i++) {
-                await sleep(50); // Adjust animation speed here (milliseconds)
+                await sleep(20); // Adjust animation speed here (milliseconds)
                 element.textContent += text[i];
             }
         }
