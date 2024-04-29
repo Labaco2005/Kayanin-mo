@@ -78,6 +78,16 @@
     margin-right: 10px;
   }
 
+  .bot-message .bot-info {
+    display: flex;
+    align-items: center;
+  }
+
+  .bot-message .bot-info .bot-name {
+    font-weight: bold;
+    margin-right: 5px;
+  }
+
   .typing-indicator {
     position: absolute;
     bottom: -20px; /* Adjusted */
@@ -217,10 +227,17 @@
       const chatMessages = document.getElementById('chat-messages');
       const messageElement = document.createElement('div');
       messageElement.className = 'message bot-message';
+      const botInfo = document.createElement('div');
+      botInfo.className = 'bot-info';
       const profileImg = document.createElement('img');
       profileImg.src = 'WengLogo.png'; // Path to your profile image
       profileImg.className = 'profile-img';
-      messageElement.appendChild(profileImg);
+      botInfo.appendChild(profileImg);
+      const botName = document.createElement('span');
+      botName.className = 'bot-name';
+      botName.innerText = 'Weng Ai';
+      botInfo.appendChild(botName);
+      messageElement.appendChild(botInfo);
       const textElement = document.createElement('span');
       textElement.innerText = message;
       messageElement.appendChild(textElement);
@@ -232,10 +249,17 @@
       const chatMessages = document.getElementById('chat-messages');
       const typingIndicator = document.createElement('div');
       typingIndicator.className = 'message bot-message typing-indicator';
+      const botInfo = document.createElement('div');
+      botInfo.className = 'bot-info';
       const profileImg = document.createElement('img');
       profileImg.src = 'WengLogo.png'; // Path to your profile image
       profileImg.className = 'profile-img';
-      typingIndicator.appendChild(profileImg);
+      botInfo.appendChild(profileImg);
+      const botName = document.createElement('span');
+      botName.className = 'bot-name';
+      botName.innerText = 'Weng Ai';
+      botInfo.appendChild(botName);
+      typingIndicator.appendChild(botInfo);
       chatMessages.appendChild(typingIndicator);
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
