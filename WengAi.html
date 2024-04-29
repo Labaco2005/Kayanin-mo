@@ -53,6 +53,7 @@
     border-radius: 5px;
     background-color: #f2f2f2;
     animation: fadeIn 0.5s ease;
+    position: relative;
   }
 
   .user-message {
@@ -67,6 +68,14 @@
     background-color: #0088cc;
     color: white;
     overflow: hidden;
+  }
+
+  .bot-message .profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: white;
+    margin-right: 10px;
   }
 
   .typing-indicator {
@@ -208,7 +217,13 @@
       const chatMessages = document.getElementById('chat-messages');
       const messageElement = document.createElement('div');
       messageElement.className = 'message bot-message';
-      messageElement.innerText = message;
+      const profileImg = document.createElement('img');
+      profileImg.src = 'WengLogo.png'; // Path to your profile image
+      profileImg.className = 'profile-img';
+      messageElement.appendChild(profileImg);
+      const textElement = document.createElement('span');
+      textElement.innerText = message;
+      messageElement.appendChild(textElement);
       chatMessages.appendChild(messageElement);
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
@@ -217,6 +232,10 @@
       const chatMessages = document.getElementById('chat-messages');
       const typingIndicator = document.createElement('div');
       typingIndicator.className = 'message bot-message typing-indicator';
+      const profileImg = document.createElement('img');
+      profileImg.src = 'WengLogo.png'; // Path to your profile image
+      profileImg.className = 'profile-img';
+      typingIndicator.appendChild(profileImg);
       chatMessages.appendChild(typingIndicator);
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
