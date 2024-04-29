@@ -2,298 +2,259 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<title>ChatGPT AI Chat</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weng Ai</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f7f7f7;
-  margin: 0;
-  padding: 0;
-}
-
-h6 {
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 10px;
-  border: 1px solid #ffffff;
-  border-radius: 5px;
-  text-align: center;
-  font-size: 24px;
-  font-weight: 900;
-  background-image: linear-gradient(
-    -225deg,
-    #E3F2FD 0%,
-    #0061FF 29%,
-    #0065FF 67%,
-    #E3F2FD 100%
-  );
-  background-size: auto auto;
-  background-clip: border-box;
-  background-size: 200% auto;
-  color: #fff;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: textclip 3s linear infinite;
-  z-index: 1; /* Ensure the title is above other elements */
-}
-
-@keyframes textclip {
-  to {
-    background-position: 200% center;
+  body {
+    margin: 0;
+    padding: 0;
+    background: url('https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcTdteWE4MGV0MnI2Z3VoenZsZjZreDZ0aWRubWJ5eTFiMXBuaHp1ciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/7VzgMsB6FLCilwS30v/giphy-downsized-large.gif') no-repeat center center fixed;
+    background-size: cover;
+    font-family: Arial, sans-serif;
   }
-}
 
-.chat-container {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 100%;
-  width: 80%; /* Adjust width as needed */
-  max-height: 60vh; /* Adjust height as needed */
-  overflow-y: auto;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: #ffffff;
-}
+  .chat-container {
+    max-width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 
-#chat-area {
-  padding: 20px;
-}
+  .chat-header {
+    background-color: rgba(0, 136, 204, 0.8);
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    font-size: 20px;
+    position: relative; /* Added */
+  }
 
-.user-message {
-  max-width: 70%;
-  padding: 10px;
-  margin: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border-radius: 10px;
-  align-self: flex-start;
-}
+  .chat-header .header-buttons {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 10px;
+  }
 
-.ai-message {
-  max-width: 70%;
-  padding: 10px;
-  margin: 10px;
-  background-color: #f0f0f0;
-  color: #333;
-  border-radius: 10px;
-  align-self: flex-end;
-}
+  .chat-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Transparent black */
+    margin-top: 50px;
+    margin-bottom: 70px;
+    position: relative; /* Added */
+  }
 
-.user-input-container {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 10px;
-  background-color: #f0f0f0;
-  display: flex;
-  align-items: center;
-  z-index: 1; /* Ensure the input container is above other elements */
-}
+  .message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    animation: fadeIn 0.5s ease;
+  }
 
-input[type="text"] {
-  flex: 1;
-  padding: 10px;
-  margin-right: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  outline: none;
-}
+  .user-message {
+    text-align: right;
+    background-color: #4CAF50;
+    color: white;
+  }
 
-button {
-  padding: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
+  .bot-message {
+    position: relative;
+    text-align: left;
+    background-color: #0088cc;
+    color: white;
+    overflow: hidden;
+  }
 
-.settings-icon {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+  .typing-indicator {
+    position: absolute;
+    bottom: -20px; /* Adjusted */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.5);
+    animation: typing 1s infinite;
+    border-radius: 50%;
+    z-index: 1; /* Added */
+  }
 
-.settings-icon i {
-  font-size: 24px;
-}
+  @keyframes typing {
+    0% {
+      width: 10px; /* Starting width of the circle */
+      height: 10px; /* Starting height of the circle */
+      opacity: 0.7; /* Starting opacity of the circle */
+    }
+    50% {
+      width: 30px; /* Halfway through, width is 30px */
+      height: 30px; /* Halfway through, height is 30px */
+      opacity: 0.3; /* Halfway through, opacity is 0.3 */
+    }
+    100% {
+      width: 50px; /* Typing finishes with width 50px */
+      height: 50px; /* Typing finishes with height 50px */
+      opacity: 0; /* Typing finishes with opacity 0 */
+    }
+  }
 
-.back-clear-container {
-  display: none;
-  position: absolute;
-  top: 60px; /* Adjusted top position to match the title */
-  right: 10px;
-  padding: 10px;
-}
+  .chat-input {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%; /* Adjust the width as needed */
+    max-width: 500px; /* Limit the maximum width */
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5); /* Transparent black */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1;
+  }
 
-.back-clear-container.active {
-  display: block;
-}
+  .chat-input input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white */
+  }
 
-.back-clear-container button {
-  display: block;
-}
+  .chat-input button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #0088cc;
+    color: white;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .header-buttons button {
+    margin-right: 5px;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
 </style>
 </head>
 <body>
-<h6>ChatGPT AI Chat</h6>
-<div class="chat-container">
-  <div id="chat-area"></div>
-</div>
-<div class="user-input-container">
-  <button class="settings-icon" onclick="toggleButtons()"><i class="fas fa-cog"></i></button>
-  <input type="text" id="user-input" placeholder="Type your message..." oninput="handleInput()">
-  <button class="send-button" onclick="sendMessage()" disabled>Send</button>
-</div>
-<div class="back-clear-container" onclick="toggleButtons()">
-  <button class="back-button" onclick="goBack()">Back</button>
-  <button class="clear-button" onclick="clearChat()">Clear</button>
-</div>
-<script src="https://kit.fontawesome.com/a076d05399.js"></script>
-<script>
-var isBotResponding = false;
-var hasAskedQuestion = false;
+  <div class="chat-container">
+    <div class="chat-header">
+      <span class="header-buttons">
+        <button onclick="clearChat()">Clear</button>
+        <button onclick="goBack()">Back</button>
+      </span>
+      Weng Ai
+    </div>
+    <div class="chat-messages" id="chat-messages"></div>
+    <div class="chat-input">
+      <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off" onkeyup="checkInput()">
+      <button id="send-button" onclick="sendMessage()" disabled><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
 
-function sendMessage() {
-  var userInput = document.getElementById("user-input").value.trim();
-  if ((!userInput && !hasAskedQuestion) || isBotResponding || userInput === "") {
-    return;
-  }
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    let botResponded = true; // Flag to track if the bot has responded
 
-  var chatArea = document.getElementById("chat-area");
+    function sendMessage() {
+      const userInput = document.getElementById('user-input');
+      const message = userInput.value.trim();
+      if (message === '' || !botResponded) return;
 
-  if (!hasAskedQuestion) {
-    hasAskedQuestion = true;
-  }
+      displayUserMessage(message);
+      userInput.value = '';
+      disableSendButton();
 
-  var userMessage = '<div class="user-message">' + userInput + '</div>';
-  chatArea.innerHTML += userMessage;
+      const apiKey = 'j86bwkwo-8hako-12C';
 
-  // Scroll to the bottom of the chat area
-  chatArea.scrollTop = chatArea.scrollHeight;
+      botResponded = false; // Set flag to false to prevent user from sending messages before response
 
-  // Disable input and send button
-  document.getElementById("user-input").disabled = true;
-  document.querySelector(".send-button").disabled = true;
-
-  // Send user message to backend API
-  var query = encodeURIComponent(userInput);
-  var url = `https://deku-rest-api.replit.app/gpt4?prompt=${query}&uid=200`;
-  isBotResponding = true;
-
-  fetch(url)
-    .then(response => response.json())
-    .then(data => {
-      console.log(data); // Log response to console
-      var aiMessage = '<div class="ai-message">' + data.gpt4 + '</div>';
-      chatArea.innerHTML += aiMessage;
-
-      // Scroll to the bottom of the chat area
-      chatArea.scrollTop = chatArea.scrollHeight;
-
-      isBotResponding = false;
-
-      // Enable input and send button
-      document.getElementById("user-input").disabled = false;
-      document.querySelector(".send-button").disabled = false;
-    })
-    .catch(error => {
-      var errorMessage = '<div class="ai-message">Sorry, I encountered an error.</div>';
-      chatArea.innerHTML += errorMessage;
-
-      // Scroll to the bottom of the chat area
-      chatArea.scrollTop = chatArea.scrollHeight;
-
-      isBotResponding = false;
-
-      // Enable input and send button
-      document.getElementById("user-input").disabled = false;
-      document.querySelector(".send-button").disabled = false;
-    });
-
-  document.getElementById("user-input").value = ""; // Clear input field after sending message
-}
-
-function scrollToBottom() {
-  var chatArea = document.getElementById("chat-area");
-  chatArea.scrollTop = chatArea.scrollHeight;
-}
-
-function goBack() {
-  window.location.href = "index.html";
-}
-
-function clearChat() {
-  var chatArea = document.getElementById("chat-area");
-  chatArea.innerHTML = "";
-  hasAskedQuestion = false;
-}
-
-function handleInput() {
-  var userInput = document.getElementById("user-input").value.trim();
-  if (userInput && !isBotResponding) {
-    document.querySelector(".send-button").disabled = false;
-  } else {
-    document.querySelector(".send-button").disabled = true;
-  }
-}
-
-function toggleButtons() {
-  var backClearContainer = document.querySelector(".back-clear-container");
-  backClearContainer.classList.toggle("active");
-}
-
-var windowHeight = window.innerHeight;
-var inputContainerHeight = document.querySelector(".user-input-container").offsetHeight;
-
-window.addEventListener('resize', function() {
-  var newWindowHeight = window.innerHeight;
-  if (newWindowHeight < windowHeight) {
-    // Keyboard is displayed
-    var bottomDistance = newWindowHeight - inputContainerHeight;
-    if (bottomDistance < 0) {
-      // Adjust the position to keep a reasonable distance from the top
-      document.querySelector(".user-input-container").style.bottom = bottomDistance + "px";
-    } else {
-      document.querySelector(".user-input-container").style.bottom = "0";
+      axios.get('https://lianeapi.onrender.com/@unregistered/api/kimmy', {
+        params: {
+          key: apiKey,
+          query: message,
+        }
+      })
+      .then(response => {
+        displayBotTypingIndicator();
+        setTimeout(() => {
+          removeBotTypingIndicator();
+          displayBotMessage(response.data.message);
+          enableSendButton();
+          botResponded = true; // Set flag to true after response
+        }, 2000); // Simulating a 2-second delay before bot response
+      })
+      .catch(error => console.error(error));
     }
-  } else {
-    // Keyboard is hidden
-    document.querySelector(".user-input-container").style.bottom = "0";
-  }
-  windowHeight = newWindowHeight;
-});
 
-window.addEventListener('scroll', function() {
-  var newWindowHeight = window.innerHeight;
-  if (newWindowHeight < windowHeight) {
-    // Keyboard is displayed
-    var bottomDistance = newWindowHeight - inputContainerHeight;
-    if (bottomDistance < 0) {
-      // Adjust the position to keep a reasonable distance from the top
-      document.querySelector(".user-input-container").style.bottom = bottomDistance + "px";
-    } else {
-      document.querySelector(".user-input-container").style.bottom = "0";
+    function displayUserMessage(message) {
+      const chatMessages = document.getElementById('chat-messages');
+      const messageElement = document.createElement('div');
+      messageElement.className = 'message user-message';
+      messageElement.innerText = message;
+      chatMessages.appendChild(messageElement);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
     }
-  } else {
-    // Keyboard is hidden
-    document.querySelector(".user-input-container").style.bottom = "0";
-  }
-  windowHeight = newWindowHeight;
-});
-</script>
+
+    function displayBotMessage(message) {
+      const chatMessages = document.getElementById('chat-messages');
+      const messageElement = document.createElement('div');
+      messageElement.className = 'message bot-message';
+      messageElement.innerText = message;
+      chatMessages.appendChild(messageElement);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function displayBotTypingIndicator() {
+      const chatMessages = document.getElementById('chat-messages');
+      const typingIndicator = document.createElement('div');
+      typingIndicator.className = 'message bot-message typing-indicator';
+      chatMessages.appendChild(typingIndicator);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function removeBotTypingIndicator() {
+      const chatMessages = document.getElementById('chat-messages');
+      const typingIndicator = document.querySelector('.typing-indicator');
+      if (typingIndicator) {
+        chatMessages.removeChild(typingIndicator);
+      }
+    }
+
+    function checkInput() {
+      const userInput = document.getElementById('user-input').value.trim();
+      const sendButton = document.getElementById('send-button');
+      if (userInput !== '' && botResponded) {
+        sendButton.removeAttribute('disabled');
+      } else {
+        sendButton.setAttribute('disabled', 'disabled');
+      }
+    }
+
+    function disableSendButton() {
+      document.getElementById('send-button').setAttribute('disabled', 'disabled');
+    }
+
+    function enableSendButton() {
+      document.getElementById('send-button').removeAttribute('disabled');
+    }
+
+    function clearChat() {
+      document.getElementById('chat-messages').innerHTML = '';
+    }
+
+    function goBack() {
+      // Redirect to index.html or the previous page
+      window.location.href = 'index.html';
+    }
+  </script>
 </body>
 </html>
