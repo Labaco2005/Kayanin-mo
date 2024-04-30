@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Chords Search</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+        body {
+            background-image: url('https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdWU0cjQ5azNnZjVxYmI2cHdrdHprY3NvamU5aXBoanZiOXhzMjZ1NCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/RlwF2vFb4y7bDnWvcO/giphy-downsized-large.gif');
+            background-size: cover;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 24px; /* Adjust font size */
+            margin-bottom: 20px;
+        }
+        form {
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+        input[type="text"] {
+            width: 80%; /* Adjust input width */
+            font-size: 18px; /* Adjust font size */
+        }
+        button[type="submit"], button[type="button"] {
+            font-size: 18px; /* Adjust font size */
+        }
+        .chords-box {
+            text-align: center;
+            width: 80%; /* Adjust the width */
+            max-width: 600px; /* Limit the maximum width */
+            overflow-x: auto; /* Enable horizontal scrolling if needed */
+            overflow-y: auto; /* Enable vertical scrolling if needed */
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            white-space: pre-wrap;
+        }
+        .highlight {
+            background-color: #ffa500;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .back-button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .back-button:hover {
+            background-color: #555;
+        }
+
+        @media screen and (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Search Song Chords</h1>
+        <form id="searchForm">
+            <label for="title">Enter song title:</label><br>
+            <input type="text" id="title" name="title"><br>
+            <button type="submit" id="submitButton">Search</button>
+            <button type="button" id="cancelButton" class="disabled">Cancel</button> <!-- Add the cancel button -->
+        </form>
+        <div class="chords-box" id="chordsBox"></div>
+        <a href="mainCenter.html" class="back-button" id="backButton">Back</a>
+    </div>
+
+    <script>
+        const form = document.getElementById('searchForm');
+        const chordsBox = document.getElementById('chordsBox');
+        const submitButton = document.getElementById('submitButton');
+        const cancelButton = document.getElementById('cancelButton'); // Select the cancel button
+        const titleInput = document.getElementById('title');
+        const backButton = document.getElementById('backButton');
+        let fetchController; // Variable to hold the AbortController instance
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            submitButton.classList.add('disabled');
+            cancelButton.classList.remove('disabled'); // Enable the cancel button
+            const title = titleInput.value;
+            fetchController = new AbortController(); // Create a new AbortController instance
+            try {
+                const response = await fetch(`https://deku-rest-api.replit.app/search/chords?q=${title}`, {
+                    signal: fetchController.signal // Pass the signal to the fetch request
+                });
+                if (fetchController.signal.aborted) {
+                    return; // Check if the request was aborted
+                }
+                const data = await response.json();
+                const chordData = data.chord;
+                await displayChords(chordData);
+                titleInput.value = ''; // Clear the search bar
+            } catch (error) {
+                console.error('Error fetching chords:', error);
+            } finally {
+                submitButton.classList.remove('disabled');
+                cancelButton.classList.add('disabled'); // Disable the cancel button after fetching is done
+            }
+        });
+
+        cancelButton.addEventListener('click', () => {
+            if (fetchController) {
+                fetchController.abort(); // Abort the fetch request if the cancel button is clicked
+                submitButton.classList.remove('disabled');
+                cancelButton.classList.add('disabled');
+            }
+        });
+
+        backButton.addEventListener('click', (event) => {
+            const confirmLeave = window.confirm('Are you sure you want to leave?');
+            if (!confirmLeave) {
+                event.preventDefault();
+            }
+        });
+
+        async function displayChords(chordData) {
+            chordsBox.innerHTML = ''; // Clear the chords box
+
+            const titleElement = document.createElement('h2');
+            titleElement.textContent = chordData.title;
+            titleElement.classList.add('highlight');
+            chordsBox.appendChild(titleElement);
+
+            const artistElement = document.createElement('p');
+            artistElement.textContent = 'Artist: ' + chordData.artist;
+            chordsBox.appendChild(artistElement);
+
+            const chordsElement = document.createElement('pre');
+            chordsBox.appendChild(chordsElement);
+
+            await typeText(chordData.chords, chordsElement, 5); // Updated to make it 5x faster
+
+            const chordsLink = document.createElement('a');
+            chordsLink.textContent = 'View Chords on Ultimate Guitar';
+            chordsLink.href = chordData.url;
+            chordsLink.target = '_blank';
+            chordsBox.appendChild(chordsLink);
+        }
+
+        async function typeText(text, element, speedMultiplier) {
+            const speed = 20 / speedMultiplier; // Adjusted animation speed
+            for (let i = 0; i < text.length; i++) {
+                await sleep(speed); // Adjust animation speed here (milliseconds)
+                if (fetchController.signal.aborted) {
+                    return; // Check if the request was aborted
+                }
+                element.textContent += text[i];
+            }
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+    </script>
+</body>
+</html>
