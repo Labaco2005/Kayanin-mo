@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snow-Ai</title>
+  <link rel="stylesheet" href="snowai.css">
+</head>
+<body>
+  <div class="chat-container" id="chat-container">
+    <h1 class="glow">Snow-Ai</h1>
+    <div class="chat-messages" id="chat-messages">
+      <!-- Messages will be displayed here -->
+    </div>
+    <div class="chat-input-container" id="chat-input-container">
+      <input type="text" class="chat-input" id="message-input" placeholder="Type a message...">
+      <button class="chat-send" id="send-button">Send</button>
+      <button class="chat-stop" id="stop-button">Stop</button>
+      <div class="typing-indicator" id="typing-indicator">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>
+    </div>
+    <div class="footer" id="footer">
+      Version v1.0.43
+    </div>
+  </div>
+
+  <div class="intro-box" id="intro-box">
+    <input type="text" class="intro-input" id="username-input" placeholder="Enter your username...">
+    <button class="intro-button" id="username-submit">Done</button>
+  </div>
+
+  <div class="confirm-box" id="confirm-box">
+    <p class="confirm-message" id="confirm-message"></p>
+    <button class="confirm-button" id="confirm-yes">Yes</button>
+    <button class="confirm-button" id="confirm-no">No</button>
+  </div>
+
+  <div class="back-button-container">
+    <button class="back-button" id="back-button">Back</button>
+  </div>
+
+  <script src="snowai.js"></script>
+</body>
+</html>

@@ -7,14 +7,13 @@
   <style>
     /* Add your custom animation styles here */
     @keyframes slidein {
-      from {
-        margin-left: 100%;
-        width: 300%; 
+      0% {
+        opacity: 0;
+        transform: translateY(50px);
       }
-
-      to {
-        margin-left: 0%;
-        width: 100%;
+      100% {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
 
@@ -23,7 +22,7 @@
         transform: scale(1);
       }
       50% {
-        transform: scale(1.1);
+        transform: scale(1.05);
       }
       100% {
         transform: scale(1);
@@ -34,13 +33,6 @@
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
-    }
-
-    .container {
-      width: 100%;
-      height: 100vh; /* Make container cover entire viewport height */
-      position: relative;
-      overflow: hidden;
       background-image: url('https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmE0M3E0MXFmNmw5MGQ1MTA3YTIzOTVvd3lyNTQ5ZnZpamVwZnZmMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ixRjDYn84Ue9PxF9Jj/giphy-downsized-large.gif');
       background-size: cover;
       background-repeat: no-repeat;
@@ -50,19 +42,21 @@
       justify-content: center;
       align-items: center;
       text-align: center;
+      height: 100vh; /* Make body cover entire viewport height */
     }
 
     .title {
       font-size: 36px;
       margin-top: 50px;
       color: #fff;
+      animation: slidein 1s ease forwards;
     }
 
-    .animate {
-      animation: slidein 3s ease-in-out;
+    .button-container {
+      margin-top: 20px;
     }
 
-    button {
+    .button {
       padding: 15px 30px;
       font-size: 18px;
       border: 2px solid #fff;
@@ -72,9 +66,10 @@
       transition: all 0.3s ease-in-out;
       margin-top: 20px;
       animation: pulsate 2s infinite ease-in-out;
+      animation-delay: 0.5s; /* Add delay to stagger animations */
     }
 
-    button:hover {
+    .button:hover {
       background-color: #fff;
       color: #007bff;
     }
@@ -82,12 +77,14 @@
 </head>
 <body>
   <div class="container">
-    <!-- Your content goes here -->
     <h1 class="title">Command Center</h1>
-    <button onclick="window.location.href='WengAi.html'">Talk to AI</button>
-    <button onclick="window.location.href='lyrics.html'">Lyrics Search</button>
-    <button onclick="window.location.href='chords.html'">Chords Search</button>
-    <button onclick="window.location.href='spotify.html'">Spotify Player</button>
+    <div class="button-container">
+      <button class="button animate" onclick="window.location.href='WengAi.html'">Talk to AI</button>
+      <button class="button animate" onclick="window.location.href='lyrics.html'">Lyrics Search</button>
+      <button class="button animate" onclick="window.location.href='chords.html'">Chords Search</button>
+      <button class="button animate" onclick="window.location.href='spotify.html'">Spotify Player</button>
+      <button class="button animate" onclick="window.location.href='snowai.html'">Snow AI</button>
+    </div>
   </div>
 </body>
 </html>
