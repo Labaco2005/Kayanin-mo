@@ -140,7 +140,7 @@
             const title = titleInput.value;
             fetchController = new AbortController(); // Create a new AbortController instance
             try {
-                const response = await fetch(`https://deku-rest-api.replit.app/search/lyrics?q=${title}`, {
+                const response = await fetch(`https://markdevs-last-api.onrender.com/search/lyrics?q=${title}`, {
                     signal: fetchController.signal // Pass the signal to the fetch request
                 });
                 if (fetchController.signal.aborted) {
