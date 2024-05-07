@@ -42,18 +42,18 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      height: 100vh; /* Make body cover entire viewport height */
+      min-height: 100vh; /* Make body cover entire viewport height */
     }
 
     .title {
-      font-size: 48px;
-      margin-top: 50px;
+      font-size: 32px;
+      margin-top: 20px;
       color: #fff;
       animation: slidein 1s ease forwards;
     }
 
     .button-container {
-      margin-top: 50px;
+      margin-top: 20px;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
@@ -61,14 +61,14 @@
     }
 
     .button {
-      padding: 15px 30px;
-      font-size: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
       border: none;
       background-color: #007bff;
       color: #fff;
       cursor: pointer;
       transition: all 0.3s ease-in-out;
-      margin: 10px;
+      margin: 5px;
       border-radius: 5px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
@@ -99,15 +99,52 @@
     }
 
     .status-container {
-      margin-top: 50px;
+      margin-top: 20px;
       color: #fff;
-      font-size: 24px;
+      font-size: 16px;
+      border: 2px solid #fff;
+      padding: 10px;
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .clock {
+      font-size: 16px;
+      color: #fff;
+      margin-top: 20px;
+    }
+
+    @media only screen and (min-width: 600px) {
+      .title {
+        font-size: 48px;
+        margin-top: 50px;
+      }
+      
+      .button {
+        padding: 15px 30px;
+        font-size: 20px;
+      }
+
+      .status-container {
+        font-size: 24px;
+      }
+
+      .clock {
+        font-size: 24px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1 class="title">Command Center</h1>
+    <div class="status-container" id="statusContainer">
+      <strong>Device Information:</strong><br>
+      Device Model: <span id="deviceModel"></span><br>
+      <strong>Battery Status:</strong><br>
+      Battery Percentage: <span id="batteryPercentage"></span><br>
+      Charging Status: <span id="chargingStatus"></span>
+    </div>
     <div class="button-container">
       <button class="button animate" onclick="window.location.href='WengAi.html'">Talk to AI</button>
       <button class="button animate" onclick="window.location.href='lyrics.html'">Lyrics Search</button>
@@ -116,29 +153,47 @@
       <button class="button animate" onclick="window.location.href='snowai.html'">Snow AI</button>
       <button class="button animate" onclick="window.location.href='ytdl.html'">YTDL</button> <!-- New button -->
     </div>
-    <div class="status-container" id="statusContainer">
-      Battery Percentage: <span id="batteryPercentage"></span><br>
-      Charging Status: <span id="chargingStatus"></span>
-    </div>
+    <div class="clock" id="clock"></div>
   </div>
 
   <script>
     // Function to update battery information
-    function updateBatteryStatus() {
-      navigator.getBattery().then(function(battery) {
-        // Update battery percentage
-        document.getElementById('batteryPercentage').innerText = (battery.level * 100).toFixed(2) + "%";
-
-        // Update charging status
-        document.getElementById('chargingStatus').innerText = battery.charging ? "Charging" : "Not Charging";
-      });
+    function updateBatteryStatus(battery) {
+      // Update battery percentage
+      document.getElementById('batteryPercentage').innerText = (battery.level * 100).toFixed(2) + "%";
+      
+      // Update charging status
+      document.getElementById('chargingStatus').innerText = battery.charging ? "Charging" : "Not Charging";
     }
 
-    // Update battery status initially
-    updateBatteryStatus();
+    // Update battery status initially and continuously
+    navigator.getBattery().then(function(battery) {
+      updateBatteryStatus(battery);
 
-    // Update battery status every 30 seconds
-    setInterval(updateBatteryStatus, 30000);
+      // Update battery status whenever it changes
+      battery.addEventListener('levelchange', function() {
+        updateBatteryStatus(battery);
+      });
+
+      battery.addEventListener('chargingchange', function() {
+        updateBatteryStatus(battery);
+      });
+    });
+
+    // Function to update device model
+    document.getElementById('deviceModel').innerText = navigator.userAgent;
+
+    // Function to update clock time
+    function updateClock() {
+      var now = new Date();
+      var options = { timeZone: 'Asia/Manila', hour12: true, hour: 'numeric', minute: '2-digit', second: '2-digit' };
+      var timeString = now.toLocaleTimeString('en-US', options);
+      document.getElementById('clock').innerText = "Current Time (Philippines): " + timeString;
+    }
+
+    // Update clock initially and continuously
+    updateClock();
+    setInterval(updateClock, 1000);
   </script>
 </body>
 </html>
