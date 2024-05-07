@@ -5,15 +5,19 @@ document.addEventListener('DOMContentLoaded', function () {
   const chatMessages = document.getElementById('chat-messages');
   const typingIndicator = document.getElementById('typing-indicator');
   const introBox = document.getElementById('intro-box');
+  const uidBox = document.getElementById('uid-box');
   const confirmBox = document.getElementById('confirm-box');
   const confirmMessage = document.getElementById('confirm-message');
   const confirmYesButton = document.getElementById('confirm-yes');
   const confirmNoButton = document.getElementById('confirm-no');
   const usernameInput = document.getElementById('username-input');
+  const uidInput = document.getElementById('uid-input');
   const usernameSubmitButton = document.getElementById('username-submit');
+  const uidSubmitButton = document.getElementById('uid-submit');
   const backButton = document.getElementById('back-button');
   let typingInterval;
   let username = '';
+  let uid = '';
 
   // Disable message input and send button by default
   messageInput.disabled = true;
@@ -26,14 +30,26 @@ document.addEventListener('DOMContentLoaded', function () {
   usernameSubmitButton.addEventListener('click', function () {
     username = usernameInput.value.trim();
     if (username !== '') {
-      // Ask for confirmation
-      showConfirmBox(`Is "${username}" your final username?`);
+      // Show UID box
+      uidBox.style.display = 'block';
+      // Hide intro box
+      introBox.style.display = 'none';
     }
   });
 
-  // Confirm username
+  // UID submission
+  uidSubmitButton.addEventListener('click', function () {
+    uid = uidInput.value.trim();
+    if (uid !== '') {
+      // Ask for confirmation
+      showConfirmBox(`Is "${username}" and ${uid} your final username and ID?`);
+    }
+  });
+
+  // Confirm username and UID
   confirmYesButton.addEventListener('click', function () {
     introBox.style.display = 'none';
+    uidBox.style.display = 'none';
     // Enable message input and send button
     messageInput.disabled = false;
     sendButton.disabled = false;
@@ -45,12 +61,14 @@ document.addEventListener('DOMContentLoaded', function () {
     confirmBox.style.display = 'none';
   });
 
-  // Change username
+  // Change username and UID
   confirmNoButton.addEventListener('click', function () {
     // Show username input again
     introBox.style.display = 'block';
-    // Clear input field
+    uidBox.style.display = 'none';
+    // Clear input fields
     usernameInput.value = '';
+    uidInput.value = '';
     // Hide confirm box
     confirmBox.style.display = 'none';
   });
@@ -115,10 +133,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Function to fetch AI response from API
   function fetchAIResponse(query) {
-    fetch(`https://hashier-api-snowflake.vercel.app/api/snowflake?ask=${query}`)
+    fetch(`https://markdevs-last-api.onrender.com/gpt4?prompt=${query}&uid=${uid}`)
       .then(response => response.json())
       .then(data => {
-        const response = data.response || 'Sorry, I could not understand that.';
+        const response = data.gpt4 || 'Sorry, I could not understand that.';
         appendMessage('Snow-Ai', response);
         showTypingIndicator(false);
         // Change stop button to send button

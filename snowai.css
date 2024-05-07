@@ -22,8 +22,8 @@ body {
 }
 
 .chat-container {
-  width: 100%; /* Adjusted to fit the screen */
-  height: 100vh; /* Adjusted to fit the screen */
+  width: 100%;
+  height: 100vh;
   border: 1px solid #ddd;
   border-radius: 10px;
   overflow: hidden;
@@ -46,7 +46,7 @@ body {
 }
 
 .chat-header.expanded {
-  height: 20vh; /* Adjusted for mobile view */
+  height: 20vh;
 }
 
 .chat-messages {
@@ -54,8 +54,8 @@ body {
   padding: 10px;
   overflow-y: auto;
   transition: height 0.5s;
-  height: calc(100% - 20vh); /* Adjusted for mobile view */
-  position: relative; /* Add relative positioning */
+  height: calc(100% - 20vh);
+  position: relative;
 }
 
 .message {
@@ -86,11 +86,11 @@ body {
   padding: 10px;
   background-color: #f5f5f5;
   transition: height 0.5s;
-  height: 10vh; /* Adjusted for mobile view */
+  height: 10vh;
 }
 
 .chat-input-container.expanded {
-  height: 20vh; /* Adjusted for mobile view */
+  height: 20vh;
 }
 
 .chat-input {
@@ -125,7 +125,7 @@ body {
   padding: 10px 20px;
   cursor: pointer;
   transition: background-color 0.3s;
-  display: none; /* Initially hidden */
+  display: none;
 }
 
 .chat-stop:hover {
@@ -133,7 +133,7 @@ body {
 }
 
 .typing-indicator {
-  display: none; /* Initially hidden */
+  display: none;
 }
 
 .typing-indicator.show {
@@ -214,6 +214,41 @@ body {
 }
 
 .intro-button:hover {
+  background-color: #005580;
+}
+
+.uid-box {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+}
+
+.uid-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.uid-submit {
+  background-color: #0088cc;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.uid-submit:hover {
   background-color: #005580;
 }
 
