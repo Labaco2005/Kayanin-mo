@@ -46,32 +46,62 @@
     }
 
     .title {
-      font-size: 36px;
+      font-size: 48px;
       margin-top: 50px;
       color: #fff;
       animation: slidein 1s ease forwards;
     }
 
     .button-container {
-      margin-top: 20px;
+      margin-top: 50px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
     }
 
     .button {
       padding: 15px 30px;
-      font-size: 18px;
-      border: 2px solid #fff;
-      background-color: transparent;
+      font-size: 20px;
+      border: none;
+      background-color: #007bff;
       color: #fff;
       cursor: pointer;
       transition: all 0.3s ease-in-out;
-      margin-top: 20px;
-      animation: pulsate 2s infinite ease-in-out;
-      animation-delay: 0.5s; /* Add delay to stagger animations */
+      margin: 10px;
+      border-radius: 5px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .button:hover {
-      background-color: #fff;
-      color: #007bff;
+      background-color: #0056b3;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    @keyframes slideup {
+      0% {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .button.animate {
+      animation: slideup 0.5s ease-in-out;
+    }
+
+    .button:last-child {
+      animation-delay: 1s; /* Add delay to stagger animations */
+    }
+
+    .status-container {
+      margin-top: 50px;
+      color: #fff;
+      font-size: 24px;
     }
   </style>
 </head>
@@ -84,7 +114,31 @@
       <button class="button animate" onclick="window.location.href='chords.html'">Chords Search</button>
       <button class="button animate" onclick="window.location.href='spotify.html'">Spotify Player</button>
       <button class="button animate" onclick="window.location.href='snowai.html'">Snow AI</button>
+      <button class="button animate" onclick="window.location.href='ytdl.html'">YTDL</button> <!-- New button -->
+    </div>
+    <div class="status-container" id="statusContainer">
+      Battery Percentage: <span id="batteryPercentage"></span><br>
+      Charging Status: <span id="chargingStatus"></span>
     </div>
   </div>
+
+  <script>
+    // Function to update battery information
+    function updateBatteryStatus() {
+      navigator.getBattery().then(function(battery) {
+        // Update battery percentage
+        document.getElementById('batteryPercentage').innerText = (battery.level * 100).toFixed(2) + "%";
+
+        // Update charging status
+        document.getElementById('chargingStatus').innerText = battery.charging ? "Charging" : "Not Charging";
+      });
+    }
+
+    // Update battery status initially
+    updateBatteryStatus();
+
+    // Update battery status every 30 seconds
+    setInterval(updateBatteryStatus, 30000);
+  </script>
 </body>
 </html>

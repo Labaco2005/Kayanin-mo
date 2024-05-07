@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>YouTube Video Player</title>
+  <link rel="stylesheet" href="ytdl.css">
+</head>
+<body>
+  <div class="header">
+    <a href="mainCenter.html" class="back-button">Back</a>
+    <div class="logo">YouTube</div>
+    <div class="search-container">
+      <input type="text" id="search-input" placeholder="Paste YouTube URL here">
+      <button id="search-button">Search</button>
+    </div>
+  </div>
+  <div class="video-container">
+    <video id="video-player" controls autoplay>
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <div class="footer">
+    <p>&copy; 2024 WangWeng. All rights reserved.</p>
+  </div>
+  <script src="ytdl.js"></script>
+</body>
+</html>
