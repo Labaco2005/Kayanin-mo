@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Facebook Video Downloader</title>
+    <link rel="stylesheet" href="fbdl.css">
+</head>
+<body>
+    <div class="background"></div>
+    <div class="container">
+        <h1>Facebook Video Downloader</h1>
+        <input type="text" id="videoUrl" placeholder="Enter Facebook Video URL">
+        <button onclick="downloadAndPlayVideo()">FBDL</button>
+        <div id="videoPlayer">
+            <img src="https://media.giphy.com/media/71DwzkiAaMgkzjJKbC/giphy.gif" alt="Loading GIF">
+        </div>
+        <div id="downloadLink"></div>
+        <button onclick="goBack()" class="back-button">Back</button>
+    </div>
+    <script src="fbdl.js"></script>
+</body>
+</html>
