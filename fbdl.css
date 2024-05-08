@@ -34,11 +34,11 @@ h1 {
     margin-bottom: 20px;
 }
 
-input[type="text"], button {
+input[type="text"], button, .download-button, .back-button {
     margin: 10px 0;
     padding: 8px 10px;
     font-size: 16px;
-    width: 100%;
+    width: calc(100% - 20px); /* Adjust width for mobile */
     box-sizing: border-box;
     background-color: white; /* Set background color to white */
     border: 1px solid #ccc; /* Add border */
@@ -61,6 +61,7 @@ button:hover, .download-button:hover, .back-button:hover {
 }
 
 video {
-    width: 100%;
+    width: 100%; /* Ensure video fills container */
+    max-width: 100%; /* Prevent video from exceeding container width */
     margin-top: 20px;
 }
